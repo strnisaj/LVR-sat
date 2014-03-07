@@ -2,8 +2,8 @@ import Izjave
 # funkcija sprejme dva seznama. Seznam sez predstavlja nerešen sudoku z nekaterimi že vpisanimi številkami,
 # seznam sezR pa rešen sudoku, ki ga predstavlja sez. Funkcija vrne izjavo, ki je resnièna, èe je sezR res rešen
 # sez in neresnièna, èe to ni res.
-def sudoku(sez,sezR):
-    n = len(sezR)
+def sudoku(sez):
+    n = len(sez)
     m = int(n**0.5)
     # Sestavimo seznam spremenljivk spremen. Spremenljivka X(i,j,k) je na mestu spremen[i][j][k-1] in po meni:
     # "V polju (i,j) je zapisano število k"
@@ -21,7 +21,7 @@ def sudoku(sez,sezR):
             if j<m and i<m:
                 spremenK[i].append([])
             for k in range(1,n+1):
-                x = Izjave.Var('X({0},{1},{2})'.format(i,j,k),sezR[i][j]==k)
+                x = Izjave.Var('X({0},{1},{2})'.format(i,j,k))
                 spremen[i][j].append(x)
                 if len(spremenK[i//m][j//m]) < n:
                     spremenK[i//m][j//m].append([])
@@ -88,12 +88,12 @@ def sudoku(sez,sezR):
 
 
 def test():
-   a = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]],[[1,2,3,4],[3,4,1,2],[2,1,4,3],[4,3,2,1]])
+   a = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])
    print(a)
-   print(a.izracun())
-   b = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]],[[1,2,2,4],[3,4,1,2],[2,1,4,3],[4,3,2,1]])
-   print(b)
-   print(b.izracun())
+   #print(a.izracun())
+   #b = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]],[[1,2,2,4],[3,4,1,2],[2,1,4,3],[4,3,2,1]])
+   #print(b)
+   #print(b.izracun())
 
 
 

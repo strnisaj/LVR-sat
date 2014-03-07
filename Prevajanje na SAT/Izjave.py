@@ -1,5 +1,5 @@
 class Var():
-    def __init__(self,ime,vrednost):
+    def __init__(self,ime,vrednost=None):
         self.ime = ime
         self.vrednost = vrednost
 
