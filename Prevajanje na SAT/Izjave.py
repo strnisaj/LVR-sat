@@ -116,27 +116,6 @@ class Not():
 
 
 
-def test():
-    a = Var('A',True)
-    b = Var('B',False)
-    c = Var('C',False)
-    f = Fal()
-    t = Tru()
-    print(izjava)
-    print(izjava.izracun())
-    izjavA = izjava.poenostavi()
-    print(izjavA)
-    print(izjavA.izracun())
-    print(And(a,t))
-    print(And(a,t).poenostavi())
-    print(Or(b,f))
-    print(Or(b,f).poenostavi())
-   
 
-def bla(*args):
-    a = ''
-    for i in args:
-        a = a+i
-    print(a)
 
     
