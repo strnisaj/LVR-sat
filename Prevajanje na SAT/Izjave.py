@@ -75,7 +75,7 @@ class Or():
         return self.izjave
 
     def izracun(self):
-        rez = True
+        rez = False
         for i in self.izjave:
             rez = rez or i.izracun()
         return rez
