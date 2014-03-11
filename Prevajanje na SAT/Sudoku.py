@@ -1,4 +1,5 @@
-import Izjave
+﻿import Izjave
+
 # funkcija sprejme dva seznama. Seznam sez predstavlja nerešen sudoku z nekaterimi že vpisanimi številkami,
 # seznam sezR pa rešen sudoku, ki ga predstavlja sez. Funkcija vrne izjavo, ki je resnièna, èe je sezR res rešen
 # sez in neresnièna, èe to ni res.
