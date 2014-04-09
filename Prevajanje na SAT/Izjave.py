@@ -1,28 +1,35 @@
 
 class Var():
-    def __init__(self,ime,vrednost=None):
+    def __init__(self,ime):
         self.ime = ime
-        self.vrednost = vrednost
 
     def __repr__(self):
-        return self.ime
+        return str(self.ime)
 
     def vrni(self):
         return self
 
-    def izracun(self):
-        return self.vrednost
+    def izracun(self,val):
+        for k,v in val.items():
+            if k == self.ime:
+                return v
 
     def poenostavi(self):
         return self
 
 class Tru(Var):
     def __init__(self):
-        Var.__init__(self,'T',True)
+        Var.__init__(self,'T')
+        
+    def izracun(self,val):
+        return True
 
 class Fal(Var):
     def __init__(self):
-        Var.__init__(self,'F',False)
+        Var.__init__(self,'F')
+
+    def izracun(self,val):
+        return False
 
 class And():
     def __init__(self, izjave):
@@ -41,11 +48,11 @@ class And():
     def vrni(self):
         return self.izjave
 
-    def izracun(self):
-        rez = True
-        for i in self.izjave:
-            rez = rez and i.izracun()
-        return rez
+    def izracun(self,val):
+        for v in self.izjave:
+            if v.izracun(val) == False:
+                return False
+        return True
 
     def poenostavi(self):
         for i in self.izjave:
@@ -75,12 +82,12 @@ class Or():
     def vrni(self):
         return self.izjave
 
-    def izracun(self):
-        rez = False
-        for i in self.izjave:
-            rez = rez or i.izracun()
-        return rez
-
+    def izracun(self,val):
+        for v in self.izjave:
+            if v.izracun(val)== True:
+                return True
+        return False
+                            
     def poenostavi(self):
         for i in self.izjave:
             if type(i) is Fal:
@@ -102,8 +109,8 @@ class Not():
     def vrni(self):
         return self.A
 
-    def izracun(self):
-        return not self.A.izracun()
+    def izracun(self,val):
+        return not self.A.izracun(val)
 
     def poenostavi(self):
         if type(self.A) is Var:
@@ -117,6 +124,14 @@ class Not():
 
 
 
-
+def test():
+   a = Var('A')
+   b = Var('B')
+   c = Var('C')
+   iz = Not(And([Or([Not(a),b]),Not(And([c,a])),Not(Or([Not(b),a,Not(c)]))]))
+   val = {'A':False,'B':True,'C':True}
+   print(iz)
+   print(iz.poenostavi())
+   print(iz.izracun(val))
 
     
