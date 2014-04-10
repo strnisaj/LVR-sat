@@ -1,12 +1,12 @@
 ﻿import Izjave
 
-# funkcija sprejme dva seznama. Seznam sez predstavlja nerešen sudoku z nekaterimi že vpisanimi številkami,
-# seznam sezR pa rešen sudoku, ki ga predstavlja sez. Funkcija vrne izjavo, ki je resnièna, èe je sezR res rešen
-# sez in neresnièna, èe to ni res.
+# Funkcija sprejme seznam seznamov, ki predstavlja nerešen sudoku (podseznami predstavljajo vrstice)
+# in vrne izjavo, ki je resnièna natanko tedaj, ko je dani sudoku rešljiv.
+
 def sudoku(sez):
     n = len(sez)
     m = int(n**0.5)
-    # Sestavimo seznam spremenljivk spremen. Spremenljivka X(i,j,k) je na mestu spremen[i][j][k-1] in po meni:
+    # Sestavimo seznam spremenljivk spremen. Spremenljivka X(i,j,k) je na mestu spremen[i][j][k-1] in pomeni:
     # "V polju (i,j) je zapisano število k"
     # Sestavimo tudi seznam spremenljivk spremenK. V tem seznamu element spremenK[i][j] predstavlja kvadratek (i,j)
     # pri èemer gresta i,j od 0 do m-1, kjer je m = sqrt(n). V vsakem elementu spremenK[i][j] je n seznamov( toliko
@@ -91,10 +91,6 @@ def sudoku(sez):
 def test():
    a = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])
    print(a)
-   #print(a.izracun())
-   #b = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]],[[1,2,2,4],[3,4,1,2],[2,1,4,3],[4,3,2,1]])
-   #print(b)
-   #print(b.izracun())
 
 
 
