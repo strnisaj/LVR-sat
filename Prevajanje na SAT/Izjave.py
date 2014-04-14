@@ -9,7 +9,8 @@
 # (npr: {'A':False,'B':True,'C':True}).
 
 # Vsako izjavo lahko poenostavimo z metodo .poenostavi(), ki potisne vse
-# negacije do spremenljivk in odstrani morebitne pojavitve Tru() in Fal().
+# negacije do spremenljivk, odstrani morebitne pojavitve Tru() in Fal()
+# in odveène oklepaje.
 
 
 class Var():
@@ -21,6 +22,9 @@ class Var():
 
     def vrni(self):
         return self
+
+    def nastavi(self,ime):
+        self.ime = ime
 
     def izracun(self,val):
         for k,v in val.items():
@@ -62,6 +66,9 @@ class And():
     def vrni(self):
         return self.izjave
 
+    def nastavi(self,izjave):
+        self.izjave = izjave
+
     def izracun(self,val):
         for v in self.izjave:
             vr = v.izracun(val)
@@ -79,6 +86,8 @@ class And():
                 self.izjave.remove(i)
             elif type(i) is Fal:
                 return Fal()
+            elif type(i) is And:
+                self.nastavi(self.izjave[:self.izjave.index(i)]+i.vrni()+self.izjave[self.izjave.index(i)+1:])
         if len(self.izjave) == 1:
             return self.izjave[0].poenostavi()
         return And([i.poenostavi() for i in self.izjave])
@@ -101,6 +110,9 @@ class Or():
     def vrni(self):
         return self.izjave
 
+    def nastavi(self,izjave):
+        self.izjave = izjave
+
     def izracun(self,val):
         for v in self.izjave:
             vr = v.izracun(val)
@@ -118,6 +130,8 @@ class Or():
                 self.izjave.remove(i)
             elif type(i) is Tru:
                 return Tru()
+            elif type(i) is Or:
+                 self.nastavi(self.izjave[:self.izjave.index(i)]+i.vrni()+self.izjave[self.izjave.index(i)+1:])
         if len(self.izjave) == 1:
             return self.izjave[0].poenostavi()
         return Or([i.poenostavi() for i in self.izjave])
@@ -132,6 +146,9 @@ class Not():
 
     def vrni(self):
         return self.A
+
+    def nastavi(self,A):
+        self.A = A
 
     def izracun(self,val):
         vr = self.A.izracun(val)
