@@ -1,4 +1,5 @@
 import Izjave
+import CNF
 
 # Funkcija dobi seznam izjav in število m, vrne pa izjavo, ki je resnièna natanko tedaj,
 # ko je v seznamu natanko m izjav resniènih.
@@ -67,7 +68,11 @@ def testS():
 # Test za hadamard()
 def testH():
     a = hadamard([[1,1,1,1],[-1,1,-1,1],[-1,-1,1,1],[1,-1,-1,-1]])
-    print(a)
+    b = hadamard([[1,1],[-1,1]])
+    print('Izjava za Hadamardovo matriko:')
+    print(b)
+    print('Izjava za Hadamardovo matriko v CNF obliki:')
+    print(CNF.CNF(b).poenostavi())
 
 
 
