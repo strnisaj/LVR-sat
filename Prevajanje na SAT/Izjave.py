@@ -153,7 +153,7 @@ class Not():
     def izracun(self,val):
         vr = self.A.izracun(val)
         if vr != -1:
-            return not self.A.izracun(val)
+            return not vr
         else: return -1 
 
     def poenostavi(self):
