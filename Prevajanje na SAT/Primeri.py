@@ -8,10 +8,10 @@ from CNF import *
 
 # Testi za Izjave
 def testIzjave1():
-   a = Var('A')
-   b = Var('B')
-   c = Var('C')
-   iz = Not(And([Or([Not(a),b]),Not(And([c,a])),Not(Or([Not(b),a,Not(c)]))]))
+   a = Izjave.Var('A')
+   b = Izjave.Var('B')
+   c = Izjave.Var('C')
+   iz = Izjave.Not(Izjave.And([Izjave.Or([Izjave.Not(a),b]),Izjave.Not(Izjave.And([c,a])),Izjave.Not(Izjave.Or([Izjave.Not(b),a,Izjave.Not(c)]))]))
    val = {'A':False,'B':True,'C':True}
    print('valuacija spremenljivk: ',str(val))
    print('izjava: ',iz)
@@ -20,16 +20,16 @@ def testIzjave1():
    print('vrednost poenostavljene izjave: ',iz.poenostavi().izracun(val))
    
 def testIzjave2():
-    a = Var('A')
-    c = Var('C')
-    b = Var('B')
-    iz = And([a,b,Not(c)])
+    a = Izjave.Var('A')
+    c = Izjave.Var('C')
+    b = Izjave.Var('B')
+    iz = Izjave.And([a,b,Izjave.Not(c)])
     val = {'A':True,'B':True}
     print(iz.izracun(val))
 	
 # Test za Sudoku
 def testSudoku():
-   a = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])
+   a = Sudoku.sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])
    print(a)
    
 # Testi za Hadamardove matrike
@@ -47,8 +47,8 @@ def testSudoku():
     print(stetje(2,sez).izracun({'A':True,'B':False,'C':True}))"""
 
 def testHadamard():
-    a = hadamard([[1,1,1,1],[-1,1,-1,1],[-1,-1,1,1],[1,-1,-1,-1]])
-    b = hadamard([[1,1],[-1,1]])
+    a = Hadamard.hadamard([[1,1,1,1],[-1,1,-1,1],[-1,-1,1,1],[1,-1,-1,-1]])
+    b = Hadamard.hadamard([[1,1],[-1,1]])
     print('Izjava za Hadamardovo matriko:')
     print(b)
     print('Izjava za Hadamardovo matriko v CNF obliki:')
