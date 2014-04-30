@@ -23,14 +23,17 @@ class Var():
     def vrni(self):
         return self
 
+    def var(self):
+        return [self]
+
     def nastavi(self,ime):
         self.ime = ime
 
     def izracun(self,val):
         for k,v in val.items():
-            if k == self.ime:
+            if k == self:
                 return v
-        return -1
+        return self
 
     def poenostavi(self):
         return self
@@ -53,11 +56,11 @@ class And():
     def __init__(self, izjave):
         self.izjave = izjave
         ime = '('
-        for i in self.izjave:
-            if self.izjave.index(i)== 0:
-                ime = ime + i.ime
+        for i in range(len(izjave)):
+            if i == 0:
+                ime = ime + str(izjave[i].ime)
             else:
-               ime = ime + ' and {0}'.format(i.ime) 
+               ime = ime + ' and {0}'.format(str(izjave[i].ime)) 
         self.ime = ime + ')'  
 
     def __repr__(self):
@@ -66,24 +69,40 @@ class And():
     def vrni(self):
         return self.izjave
 
+    def var(self):
+        spr = set()
+        for i in self.izjave:
+            spr = spr.union(set(i.var()))
+        return list(spr)
+            
+
     def nastavi(self,izjave):
         self.izjave = izjave
 
     def izracun(self,val):
+        sez = []
         for v in self.izjave:
             vr = v.izracun(val)
-            if vr != -1:
-                if vr == False:
-                    return False
-            else:
-                return -1
-    
-        return True
+            if vr == False:
+                return False
+            elif type(vr) == Var or type(vr) == Not:
+                sez.append(vr)
+            elif type(vr) == And or type(vr) == Or:
+                vr_izjave = vr.vrni()
+                if len(vr_izjave) == 1:
+                    sez.append(vr_izjave[0])
+                else:
+                    sez.append(vr)
+        if not sez:
+            return True
+        else:
+            return And(sez)
 
     def poenostavi(self):
         for i in self.izjave:
             if type(i) is Tru:
                 self.izjave.remove(i)
+                return self
             elif type(i) is Fal:
                 return Fal()
             elif type(i) is And:
@@ -97,12 +116,12 @@ class Or():
     def __init__(self, izjave):
         self.izjave = izjave
         ime = '('
-        for i in self.izjave:
-            if self.izjave.index(i)== 0:
-                ime = ime + i.ime
+        for i in range(len(izjave)):
+            if i == 0:
+                ime = ime + str(izjave[i].ime)
             else:
-               ime = ime + ' or {0}'.format(i.ime) 
-        self.ime = ime + ')'
+               ime = ime + ' or {0}'.format(str(izjave[i].ime)) 
+        self.ime = ime + ')' 
 
     def __repr__(self):
         return self.ime
@@ -110,19 +129,33 @@ class Or():
     def vrni(self):
         return self.izjave
 
+    def var(self):
+        spr = set()
+        for i in self.izjave:
+            spr = spr.union(set(i.var()))
+        return list(spr)
+
     def nastavi(self,izjave):
         self.izjave = izjave
 
     def izracun(self,val):
+        sez = []
         for v in self.izjave:
             vr = v.izracun(val)
-            if vr != -1:
-                if vr == True:
-                    return True
-            else:
-                return -1
-    
-        return False
+            if vr == True:
+                return True
+            elif type(vr) == Var or type(vr) == Not:
+                sez.append(vr)
+            elif type(vr) == And or type(vr) == Or:
+                vr_izjave = vr.vrni()
+                if len(vr_izjave) == 1:
+                    sez.append(vr_izjave[0])
+                else:
+                    sez.append(vr)
+        if not sez:
+            return True
+        else:
+            return Or(sez)
                             
     def poenostavi(self):
         for i in self.izjave:
@@ -139,7 +172,7 @@ class Or():
 class Not():
     def __init__(self,A):
         self.A = A
-        self.ime = 'not{0}'.format(self.A.ime)
+        self.ime = 'not{0}'.format(str(self.A.ime))
 
     def __repr__(self):
         return self.ime
@@ -147,14 +180,18 @@ class Not():
     def vrni(self):
         return self.A
 
+    def var(self):
+        return self.A.var()
+
     def nastavi(self,A):
         self.A = A
 
     def izracun(self,val):
         vr = self.A.izracun(val)
-        if vr != -1:
+        if type(vr) != bool:
+            return Not(vr)
+        else:
             return not vr
-        else: return -1 
 
     def poenostavi(self):
         if type(self.A) is Var:
@@ -179,11 +216,15 @@ def test():
    print('poenostavljena izjava: ',iz.poenostavi())
    print('vrednost izjave: ',iz.izracun(val))
    print('vrednost poenostavljene izjave: ',iz.poenostavi().izracun(val))
+   print('spremenljivke, ki nastopajo: ',iz.var())
 
 def test1():
     a = Var('A')
     c = Var('C')
     b = Var('B')
-    iz = And([a,b,Not(c)])
+    iz = And([a,And([c,b]),Or([Not(a),Not(c)])])
     val = {'A':True,'B':True}
+    print(iz)
     print(iz.izracun(val))
+    print(iz.var())
+
