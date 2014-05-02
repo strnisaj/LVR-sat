@@ -95,6 +95,8 @@ class And():
                     sez.append(vr)
         if not sez:
             return True
+        elif len(sez) == 1:
+            return sez[0]
         else:
             return And(sez)
 
@@ -154,6 +156,8 @@ class Or():
                     sez.append(vr)
         if not sez:
             return True
+        elif len(sez) == 1:
+            return sez[0]
         else:
             return Or(sez)
                             
@@ -188,10 +192,10 @@ class Not():
 
     def izracun(self,val):
         vr = self.A.izracun(val)
-        if type(vr) != bool:
-            return Not(vr)
-        else:
+        if type(vr) == bool:
             return not vr
+        else:
+            return Not(vr)
 
     def poenostavi(self):
         if type(self.A) is Var:
