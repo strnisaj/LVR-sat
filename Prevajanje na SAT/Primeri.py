@@ -1,67 +1,99 @@
 # Primeri uporabe
 # -*- encoding: utf-8 -*-
-
+import time
 from Izjave import *
 from Sudoku import *
 from Hadamard import *
 from CNF import *
 
 # Testi za Izjave
-def testIzjave1():
-   a = Izjave.Var('A')
-   b = Izjave.Var('B')
-   c = Izjave.Var('C')
-   iz = Izjave.Not(Izjave.And([Izjave.Or([Izjave.Not(a),b]),Izjave.Not(Izjave.And([c,a])),Izjave.Not(Izjave.Or([Izjave.Not(b),a,Izjave.Not(c)]))]))
-   val = {'A':False,'B':True,'C':True}
-   print('valuacija spremenljivk: ',str(val))
-   print('izjava: ',iz)
-   print('poenostavljena izjava: ',iz.poenostavi())
-   print('vrednost izjave: ',iz.izracun(val))
-   print('vrednost poenostavljene izjave: ',iz.poenostavi().izracun(val))
+def primerIzjave():
+   a = Var('A')
+   b = Var('B')
+   c = Var('C')
+
+   #primer za OR
+   or1 = Or([a,b,c]);
+   or2 = Or([a, Or([a,b]),b,Or([b,c])]);
+
+   #primer za AND
+   and1 = And([a,b,c]);
+   and2 = And([a,b,And([a,c])]);
+
+   #primer za NOT
+   not1 = Not(a);
+   not2 = Not(or2);
+   not3 = Not(and2);
+
+   #primeri za NNF
+   nnf1 = not2.poenostavi();
+   nnf2 = not3.poenostavi();
+
+   #primer za CNF
+   izjava1 = Not(And([Or([Not(a),b]),Not(And([c,a])),Not(Or([Not(b),a,Not(c)]))]))
+   cnf1 = CNF(izjava1)
+
+   #primeri za izracun
+   #za izracun nastavimo spremenljivkam vrednosti
+   val = {'A':False,'B':True,'C':True}   
+   #izracun izjave, ki ni poenostavljena
+   izracun1 = izjava1.izracun(val)
+   #izracun poenostavljene izjave
+   izracun2 = izjava1.poenostavi().izracun(val)
+
+   #izpis
+   print('Primer za OR: ',or2)
+   print('Primer za AND: ',and2)
+   print('Primer za NNF: ',nnf2)
+   print('Primer za CNF: ',cnf1)
+   print('Primer za izracun - izjava: ', izjava1)
+   print('Primer za izracun: ', izracun1)
+   print('Primer za izracun poenostavljene izjave: ', izracun2)
    
-def testIzjave2():
-    a = Izjave.Var('A')
-    c = Izjave.Var('C')
-    b = Izjave.Var('B')
-    iz = Izjave.And([a,b,Izjave.Not(c)])
-    val = {'A':True,'B':True}
-    print(iz.izracun(val))
 	
 # Test za Sudoku
-def testSudoku():
-   a = Sudoku.sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])
-   print(a)
+""" 
+"""
+def primerSudoku():
+    # Sudoku podamo kot dvodimenzionalno tabelo (nxn) stevil. Podana tabela vsebuje stevila od 0 do 9,
+    # kjer 0 oznacuje prazno (se nereseno) polje sudokuja.
+    # Lazji primer za sudoku
+    t0 = time.clock()
+    a = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])
+    t1 = time.clock() - t0
+    print('Sudoku a: ', a)
+    print('Cas za sudoku a: ', t1)
+    # Malo tezji primer za sudoku
+    t0 = time.clock()
+    b = sudoku([[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]])
+    t1 = time.clock() - t0
+    print('Sudoku b: ',b)
+    print('Cas za sudoku b: ')
+    c = b.poenostavi();
+    print('Poenostavljena izjava za sudoku b: ', c)
    
 # Testi za Hadamardove matrike
-"""def testHadamardStetje():
-    a = Izjave.Var('A')
-    b = Izjave.Var('B')
-    c = Izjave.Var('C')
-    iz1 = Izjave.And([a,c])
-    iz2 = Izjave.Or([Izjave.Not(a),b])
-    iz3 = Izjave.Not(Izjave.And([b,c]))
-    sez = [iz1,iz2,iz3]
-    print(sez)
-    print([i.izracun({'A':True,'B':False,'C':True}) for i in sez])
-    print(stetje(2,sez))
-    print(stetje(2,sez).izracun({'A':True,'B':False,'C':True}))"""
+def primerHadamard():
+    #Hadamardovo matriko podamo kot dvodimenzionalno tabelo sestavljeno iz 1 in -1.
+    # Lazji primer za Hadamardovo matriko
+    t0 = time.clock()
+    a = hadamard([[1,1],[-1,1]])
+    t1 = time.clock() - t0
+    print('Cas za Hadamardovo matriko a: ',t1)
+    # Malo tezji primer za Hadamardovo matriko
+    t0 = time.clock()
+    b = hadamard([[1,1,1,1],[-1,1,-1,1],[-1,-1,1,1],[1,-1,-1,-1]])
+    t1 = time.clock() - t0
+    print('Izjava za Hadamardovo matriko b: ', b)
+    print('Cas za Hadamardovo matriko b: ', t1);
+    c = CNF(b)
+    print('Izjava za Hadamardovo matriko v CNF obliki: ', c)
 
-def testHadamard():
-    a = Hadamard.hadamard([[1,1,1,1],[-1,1,-1,1],[-1,-1,1,1],[1,-1,-1,-1]])
-    b = Hadamard.hadamard([[1,1],[-1,1]])
-    print('Izjava za Hadamardovo matriko:')
-    print(b)
-    print('Izjava za Hadamardovo matriko v CNF obliki:')
-    print(CNF.CNF(b).poenostavi())
+
+print('IZJAVE')
+primerIzjave()
+print('SUDOKU')
+primerSudoku()
+print('HADAMARD')
+primerHadamard()
 	
-# Test za CNF
-def testCNF():
-    a = Izjave.Var('A')
-    b = Izjave.Var('B')
-    c = Izjave.Var('C')
-    d = Izjave.Var('D')
-    val = {'A':True,'B':False,'C':True,'D':False}
-    iz = Izjave.Or([Izjave.And([a,b]),Izjave.And([c,d]),d])
-    iz1 = Izjave.Not(Izjave.And([Izjave.Or([Izjave.Not(a),b]),c]))
-    iz2 = Izjave.Or([Izjave.Or([a,Izjave.And([c,d])]),d])
-    return iz

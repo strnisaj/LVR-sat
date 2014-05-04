@@ -1,8 +1,8 @@
 import Izjave
 import CNF
 
-# Funkcija dobi seznam izjav in število m, vrne pa izjavo, ki je resnièna natanko tedaj,
-# ko je v seznamu natanko m izjav resniènih.
+# Funkcija dobi seznam izjav in stevilo m, vrne pa izjavo, ki je resnicna natanko tedaj,
+# ko je v seznamu natanko m izjav resnicnih.
 def stetje(m,sez):
     k = len(sez)
     if k == 1 and m == 0:
@@ -18,7 +18,7 @@ def stetje(m,sez):
             return Izjave.Or([Izjave.And([sez[k-1],stetje(m-1,sez[:k-1])]),Izjave.And([Izjave.Not(sez[k-1]),stetje(m,sez[:k-1])])])
 
 # Funkcija sprejme seznam seznamov, ki predstavlja n x n matriko (podseznami predstavljajo vrstice v matriki)
-# in vrne izjavo, ki je resnièna, natanko tedaj, ko je matrika Hadamardova.
+# in vrne izjavo, ki je resnicna, natanko tedaj, ko je matrika Hadamardova.
 def hadamard(sez):
     n = len(sez)
     spremen = []

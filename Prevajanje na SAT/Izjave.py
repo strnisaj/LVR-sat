@@ -1,7 +1,7 @@
 # Spodnji razredi predstavljajo strukturo za predstavitev Boolovih formul.
 # Var() predstavlja spremenljivko
 # Tru() in Fal() predstavljata konstanti True in False
-# And() in Or() predstavljata logièna veznika /\ in \/
+# And() in Or() predstavljata logicna veznika 
 # Not() predstavlja negacijo
 
 # Vsako izjavo lahko valuiramo z metodo .izracun(val), ki sprejme slovar
@@ -10,7 +10,7 @@
 
 # Vsako izjavo lahko poenostavimo z metodo .poenostavi(), ki potisne vse
 # negacije do spremenljivk, odstrani morebitne pojavitve Tru() in Fal()
-# in odveène oklepaje.
+# in odvecne oklepaje.
 
 
 class Var():

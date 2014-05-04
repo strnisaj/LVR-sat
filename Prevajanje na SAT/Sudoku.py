@@ -2,16 +2,15 @@
 import Izjave
 import CNF
 
-# funkcija sprejme dva seznama. Seznam sez predstavlja nerešen sudoku z nekaterimi že vpisanimi številkami,
-# seznam sezR pa rešen sudoku, ki ga predstavlja sez. Funkcija vrne izjavo, ki je resnièna, èe je sezR res rešen
-# sez in neresnièna, èe to ni res.
+# Funkcija sprejme seznam sez, ki predstavlja neresen sudoku z nekaterimi ze vpisanimi stevilkami.
+# Funkcija vrne izjavo, ki je resnicna, ce je sez resljiv.
 def sudoku(sez):
     n = len(sez)
     m = int(n**0.5)
     # Sestavimo seznam spremenljivk spremen. Spremenljivka X(i,j,k) je na mestu spremen[i][j][k-1] in po meni:
     # "V polju (i,j) je zapisano število k"
     # Sestavimo tudi seznam spremenljivk spremenK. V tem seznamu element spremenK[i][j] predstavlja kvadratek (i,j)
-    # pri èemer gresta i,j od 0 do m-1, kjer je m = sqrt(n). V vsakem elementu spremenK[i][j] je n seznamov( toliko
+    # pri cemer gresta i,j od 0 do m-1, kjer je m = sqrt(n). V vsakem elementu spremenK[i][j] je n seznamov( toliko
     # kolikor je možnih števil. V k+1-em so spremenljivke X(i,j,k) za vse i,j med 0 in m-1.
     spremen = []
     spremenK = []
@@ -57,7 +56,7 @@ def sudoku(sez):
                 seznam3.append(spremen[i][j][sez[i][j]-1])
     izjava3 = Izjave.And(seznam3)
 
-    # Sestavimo izjavo: "V vsaki vrstici so sama razlièna števila"
+    # Sestavimo izjavo: "V vsaki vrstici so sama razlicna števila"
     seznam4 = []
     for i in range(n):
         for j in range(n):
@@ -66,7 +65,7 @@ def sudoku(sez):
                     seznam4.append(Izjave.Not(Izjave.And([spremen[i][j][k-1],spremen[i][l][k-1]])))
     izjava4 = Izjave.And(seznam4)
 
-    # Sestavimo izjavo: "V vsakem stolpcu so sama razlièna števila"
+    # Sestavimo izjavo: "V vsakem stolpcu so sama razlicna števila"
     seznam5 = []
     for j in range(n):
         for i in range(n):
@@ -96,11 +95,11 @@ def testS():
    print('Izjava za sudoku:')
    t0 = time.clock()
    print(b)
-   print('pretekel èas: ',time.clock()-t0)
+   print('pretekel cas: ',time.clock()-t0)
    print('Izjava za sudoku v CNF obliki:')
    t0 = time.clock()
    print(CNF.CNF(b))
-   print('pretekel èas: ',time.clock()-t0)
+   print('pretekel cas: ',time.clock()-t0)
 
 
 
