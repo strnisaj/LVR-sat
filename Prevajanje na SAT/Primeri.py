@@ -52,8 +52,6 @@ def primerIzjave():
    
 	
 # Test za Sudoku
-""" 
-"""
 def primerSudoku():
     # Sudoku podamo kot dvodimenzionalno tabelo (nxn) stevil. Podana tabela vsebuje stevila od 0 do 9,
     # kjer 0 oznacuje prazno (se nereseno) polje sudokuja.

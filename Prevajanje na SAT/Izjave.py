@@ -74,7 +74,6 @@ class And():
         for i in self.izjave:
             spr = spr.union(set(i.var()))
         return list(spr)
-            
 
     def nastavi(self,izjave):
         self.izjave = izjave

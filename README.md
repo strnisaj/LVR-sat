@@ -1,36 +1,41 @@
-LVR-sat
-=======
+#LVR-sat
 
-Prevajanje na SAT
-=================
+##Prevajanje na SAT
 
-Ta modul vsebuje ogrodje za delo z logičnimi izrazi (datoteka Izjave.py), primera prevedbe znanih problemov (Hadamardove matrike in sudoku) na SAT ter testno okolje (datoteka Primeri.py).
+Ta modul vsebuje ogrodje za delo z logičnimi izrazi (datoteka Izjave.py), primera prevedbe znanih problemov (Hadamardove matrike in sudoku) na SAT, SAT solverja (dpll.py) ter primere uporabe (datoteka Primeri.py).
 
-Datoteke
-========
+##Datoteke
 
 V modulu se nahajajo datoteke:
 + <b>CNF.py</b> (metode za pretvarjanje izrazov v konjuktivno normalno obliko)
 + <b>Hadamard.py</b> (prevedba Hadamardove matrike na SAT problem)
 + <b>Izjave.py</b> (osnovno ogrodje za delo z logičnimi izrazi)
-+ <b>Primeri.py</b> (testno okolje)
++ <b>Primeri.py</b> (primeri uporabe)
 + <b>Sudoku.py</b> (prevedba sudoku na SAT problem)
++ <b>dpll.py</b> (SAT solver)
 
-Uporaba
-=======
+##Uporaba
+###Testno okolje
+Za testiranje delovanja funkcij, so v vsaki datoteki temu namenjene metode.
 
-CNF
----
+###CNF
+
 CNF.py datoteka vsebuje le funkcijo <b>CNF(p)</b>, kjer je p izjava, katero želimo prevesti v CNF obliko. 
 
-Hadamard
---------
+V datoteki se nahaja tudi funkcija <b>test()</b>, ki testira delovanje CNF. Poženemo jo iz konzole.
+Beležimo tudi čas izvajanja funkcije <b>CNF</b>.
+
+###Hadamard
+
 Hadamard.py je sestavljen iz dveh funkcij in sicer <b>stetje(m, sez)</b> in <b>hadamard(sez)</b>.
 Funkcija <b>stetje</b> sprejme seznam izjav sez in število m, vrne pa izjavo, ki je resnična natanko tedaj, ko je v seznamu izjav sez resničnih natanko m izjav.
 <b>Hadamard</b> funkcija pa sprejme nxn matriko in vrne izjavo, ki je resnična natanko tedaj, ko je matrika Hadamardova.
 
-Izjave
-------
+Testiranje delovanje je izvedeno s pomočjo funkcij <b>testS()</b>, ki testira delovanje funkcije <b>stetje</b>, ter <b>testH()</b>, ki testira delovanje funkcije <b>hadamard</b>. Obe kličemo iz konzole.
+<b>testH</b> beleži še hitrost delovanja za primer sestavljanja izjave za hadamardovo matriko in za primer sestavljanja izjave za hadamardovo matriko v CNF obliki, beleži se tudi razlika v hitrosti izvajanja med obema.
+
+###Izjave
+
 Izjave.py datoteka je sestavljena iz sledečih razredov:
 + <b>Var()</b> (predstavlja spremenljivke)
 + <b>Tru()</b> (predstavlja konstanto True)
@@ -47,10 +52,17 @@ Vsak razred (razen <b>Tru()</b> in <b>Fal()</b>) vsebuje funkcije:
 
 Razreda <b>Tru()</b> in <b>Fal()</b> vsebujeta le funkcijo <b>izracun</b>.
 
-Sudoku
-------
+Izjave.py vsebujejo še dve funkciji za testiranje in sicer <b>test()</b> in <b>test1()</b>. 
+
+###Sudoku
+
 Sudoku.py vsebuje fukncijo <b>sudoku(sez)</b>. Ta sprejme dvodimenzionalno tabelo (nxn matrika), ki predstavlja nerešen sudoku. Kot rezultat nam vrne izjavo, ki je resnična natanko tedaj, ko za dani sudoku obstaja rešitev.
 
-Primeri
--------
-Tu se nahajajo testi za Izjave.py, Hadamard.py, Sudoku.py in CNF.py.
+Poleg <b>sudoku</b> funkcije vsebuje še <b>testS()</b>, s katero lahko testiramo delovanje. Beleži se tudi čas izvajanja za reševanje sudoku problema (sestavljanje izjave za sudoku), sestavljanje izjave v CNF obliki in razlika v hitrosti delovanja obeh.
+
+###DPLL
+Algoritem [DPLL](http://en.wikipedia.org/wiki/DPLL_algorithm) ...
+
+###Primeri
+
+Tu se nahajajo primeri uporabe za Izjave.py, Hadamard.py, Sudoku.py in CNF.py. Ob zagonu datoteke, se izvedejo primeri uporabe za Izjave (primeri za And, Or, Not, CNF in NNF), Sudoku (primer za sudoku velikosti 4x4 in 9x9) ter Hadamardovo matriko (primer za velikost 2 in 4). Za sudoku in Hadamardove matrike se beleži še čas izvajanja programa.

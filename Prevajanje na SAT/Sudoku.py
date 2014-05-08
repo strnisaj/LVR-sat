@@ -86,20 +86,22 @@ def sudoku(sez):
 
     return Izjave.And([izjava1,izjava2,izjava3,izjava4,izjava5,izjava6])
 
-
-
-
+	 
 def testS():
    a = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])
+   print('1. Izjava za sudoku:')
+   t0 = time.clock()
    b = sudoku([[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]])
-   print('Izjava za sudoku:')
-   t0 = time.clock()
-   print(b)
-   print('pretekel cas: ',time.clock()-t0)
-   print('Izjava za sudoku v CNF obliki:')
-   t0 = time.clock()
-   print(CNF.CNF(b))
-   print('pretekel cas: ',time.clock()-t0)
+   t01 = time.clock() - t0
+	print('pretekel cas: ', t01)
+	print(b)
+   print('2. Izjava za sudoku v CNF obliki:')
+   t1 = time.clock()
+	c = CNF(sudoku([[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]]))
+   t11 = time.clock() - t1
+	print('pretekel cas: ', t11)
+	print(c)
+	print('časovna razlika med 1. in 2.: ', t01 - t11)
 
 
 

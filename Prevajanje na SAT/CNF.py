@@ -1,4 +1,5 @@
 import Izjave
+import time
 
 def CNF(p):
     p = p.poenostavi()
@@ -31,16 +32,20 @@ def CNF(p):
                 
 
 def test():
-    a = Izjave.Var('A')
-    b = Izjave.Var('B')
-    c = Izjave.Var('C')
-    d = Izjave.Var('D')
-    val = {'A':True,'B':False,'C':True,'D':False}
-    iz = Izjave.Or([Izjave.And([a,b]),Izjave.And([c,d]),d])
-    iz1 = Izjave.Not(Izjave.And([Izjave.Or([Izjave.Not(a),b]),c]))
-    iz2 = Izjave.Or([Izjave.Or([a,Izjave.And([c,d])]),d])
-    return iz
-
-    
-                   
-
+    a = izjave.var('a')
+    b = izjave.var('b')
+    c = izjave.var('c')
+    d = izjave.var('d')
+    # val = {'A':True,'B':False,'C':True,'D':False}
+    # iz = Izjave.Or([Izjave.And([a,b]),Izjave.And([c,d]),d])
+    # iz1 = Izjave.Not(Izjave.And([Izjave.Or([Izjave.Not(a),b]),c]))
+    # iz2 = Izjave.Or([Izjave.Or([a,Izjave.And([c,d])]),d])
+    # return iz
+	 izjava = Not(And([Or([Not(a),b]),Not(And([c,a])),Not(Or([Not(b),a,Not(c)]))]))
+	 print('Izjava: ', izjava)
+	 t0 = time.clock()
+	 izcnf = CNF(izjava)
+	 t01 = time.clock() - t0
+	 print('Izjava v CNF obliki: ', izcnf)
+	 print('Pretekel cas: ', t01)
+	 
