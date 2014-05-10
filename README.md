@@ -52,7 +52,7 @@ Vsak razred (razen <b>Tru()</b> in <b>Fal()</b>) vsebuje funkcije:
 
 Razreda <b>Tru()</b> in <b>Fal()</b> vsebujeta le funkcijo <b>izracun</b>.
 
-Izjave.py vsebujejo še dve funkciji za testiranje in sicer <b>test()</b> in <b>test1()</b>. 
+Izjave.py vsebujejo funkcijo za testiranje <b>test()</b>. V testu izvajamo poenostavljanje, računanje vrednosti izjave ter izpis nastopajočih spremenljivk. Za poenostavljanje in računanje vrednosti beležimo še čas izvajanja.
 
 ###Sudoku
 
@@ -61,7 +61,7 @@ Sudoku.py vsebuje fukncijo <b>sudoku(sez)</b>. Ta sprejme dvodimenzionalno tabel
 Poleg <b>sudoku</b> funkcije vsebuje še <b>testS()</b>, s katero lahko testiramo delovanje. Beleži se tudi čas izvajanja za reševanje sudoku problema (sestavljanje izjave za sudoku), sestavljanje izjave v CNF obliki in razlika v hitrosti delovanja obeh.
 
 ###DPLL
-Algoritem [DPLL](http://en.wikipedia.org/wiki/DPLL_algorithm) ...
+Algoritem [DPLL](http://en.wikipedia.org/wiki/DPLL_algorithm) se še upira končani implementaciji.
 
 ###Primeri
 
