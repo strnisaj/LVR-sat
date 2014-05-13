@@ -1,12 +1,13 @@
 # Primeri uporabe
 # -*- encoding: utf-8 -*-
-import time
+from time import *
 from Izjave import *
 from Sudoku import *
 from Hadamard import *
 from CNF import *
+from DPLL_rok import *
 
-# Testi za Izjave
+# Primer uporabe za Izjave
 def primerIzjave():
    a = Var('A')
    b = Var('B')
@@ -51,7 +52,7 @@ def primerIzjave():
    print('Primer za izracun poenostavljene izjave: ', izracun2)
    
 	
-# Test za Sudoku
+# Primer uporabe za Sudoku
 def primerSudoku():
     # Sudoku podamo kot dvodimenzionalno tabelo (nxn) stevil. Podana tabela vsebuje stevila od 0 do 9,
     # kjer 0 oznacuje prazno (se nereseno) polje sudokuja.
@@ -70,7 +71,7 @@ def primerSudoku():
     c = b.poenostavi();
     print('Poenostavljena izjava za sudoku b: ', c)
    
-# Testi za Hadamardove matrike
+# Primer uporabe za Hadamardove matrike
 def primerHadamard():
     #Hadamardovo matriko podamo kot dvodimenzionalno tabelo sestavljeno iz 1 in -1.
     # Lazji primer za Hadamardovo matriko
@@ -87,8 +88,14 @@ def primerHadamard():
     c = CNF(b)
     print('Izjava za Hadamardovo matriko v CNF obliki: ', c)
 
+# Primer uporabe za DPLL algoritem
 def primerDPLL():
-	
+	izjava = And([Or([y, Not(q)]), Or([y, Not(z)]), Or([x, Not(y)]), Or([y,z,q]), Or([x,Not(z)]), Or([x,Not(q)])])
+	t0 = time.clock()
+	a = DPLL(izjava)
+	t01 = time.clock() - t0
+	print('1. Izjava: ', izjava)
+	print('Cas za resevanje izjave z DPLL algoritmom: ', t01)
 
 print('IZJAVE')
 primerIzjave()
@@ -96,4 +103,6 @@ print('SUDOKU')
 primerSudoku()
 print('HADAMARD')
 primerHadamard()
+print('DPLL')
+primerDPLL()
 	

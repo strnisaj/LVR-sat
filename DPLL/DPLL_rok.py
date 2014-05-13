@@ -406,7 +406,7 @@ def pozdravnaMetoda():
     print('******************************************************')
     print('Pozdravljeni v algoritmu DPLL')
     print('Za zagon algoritma poklicite funkcijo: DPLL(izjava), ki ji podate izjavo')
-    print('Primer izjave: ((X or Y) and (Y or notZ)) := And( [ Or([ X, Y ]) , Or([ Y, Not(Z) ]) ] )')
+    print('Primer izjave: ((X or Y) and (Y or Not(Z))) := And( [ Or([ X, Y ]) , Or([ Y, Not(Z) ]) ] )')
     print('Za preverjanje pravilnosti delovanja sta spodaj prilozena copy/paste testna primera')
     
     print('izjava=getTestIzjava(0) -----> ((X or notY or notZ) and (notX or notY) and (X or Z) and (notX or notQ))')
@@ -426,8 +426,3 @@ def pozdravnaMetoda():
     print('******************************************************')
 
 pozdravnaMetoda()
-
-
-
-
-

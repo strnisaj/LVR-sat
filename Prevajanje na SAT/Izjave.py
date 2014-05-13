@@ -1,7 +1,7 @@
 # Spodnji razredi predstavljajo strukturo za predstavitev Boolovih formul.
 # Var() predstavlja spremenljivko
 # Tru() in Fal() predstavljata konstanti True in False
-# And() in Or() predstavljata logièna veznika /\ in \/
+# And() in Or() predstavljata logicna veznika /\ in \/
 # Not() predstavlja negacijo
 
 # Vsako izjavo lahko valuiramo z metodo .izracun(val), ki sprejme slovar
@@ -10,7 +10,7 @@
 
 # Vsako izjavo lahko poenostavimo z metodo .poenostavi(), ki potisne vse
 # negacije do spremenljivk, odstrani morebitne pojavitve Tru() in Fal()
-# in odveène oklepaje.
+# in odvecne oklepaje.
 
 
 class Var():
@@ -214,26 +214,31 @@ class Not():
 
 
 # Test za izjave
+# Imamo dva primera izjav: iz in iz1. Nad izjavo delamo sledece operacije:
+# 		- poenostavljanje izjave (pretvorba v NNF obliko)
+# 		- racunanje vrednosti izjave (za dan nabor vrednosti spremenljivk izracunamo izjavo)
+#		- izpis nastopajocih spremenljivk (za dano izjavo vrnemo vse spremenljivke)
 def test():
    a = Var('A')
    b = Var('B')
    c = Var('C')
    iz = Not(And([Or([Not(a),b]),Not(And([c,a])),Not(Or([Not(b),a,Not(c)]))]))
-   val = {'A':False,'B':True,'C':True}
-   print('valuacija spremenljivk: ',str(val))
-   print('izjava: ',iz)
-   print('poenostavljena izjava: ',iz.poenostavi())
-   print('vrednost izjave: ',iz.izracun(val))
-   print('vrednost poenostavljene izjave: ',iz.poenostavi().izracun(val))
-   print('spremenljivke, ki nastopajo: ',iz.var())
+	iz1 = And([a,And([c,b]),Or([Not(a),Not(c)])])
+	print('Poenostavitev izjave: ')
+	t0 = time.clock()
+	i = iz.poenostavi()
+	print('Pretekel cas: ', time.clock() - t0)
+	print('Poenostavljena izjava: ', i)
+	print('###############################')
 
-def test1():
-    a = Var('A')
-    c = Var('C')
-    b = Var('B')
-    iz = And([a,And([c,b]),Or([Not(a),Not(c)])])
-    val = {'A':True,'B':True}
-    print(iz)
-    print(iz.izracun(val))
-    print(iz.var())
+	print('Vrednost izjave: ')
+	val = {'A':False,'B':True,'C':True}
+	val1 = {'A':True,'B':True}
+	t0 = time.clock()
+	j = iz.izracun(val)
+	print('Pretekel cas: ', time.clock() - t0)
+	print('Vrednost: ', j)
+	print('###############################')
+
+	print('Nastopajoce spremenljivke: ', iz.var())
 

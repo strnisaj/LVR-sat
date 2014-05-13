@@ -1,6 +1,6 @@
 #LVR-sat
 
-##Prevajanje na SAT
+##DPLL
 
 Ta modul vsebuje ogrodje za delo z logičnimi izrazi (datoteka Izjave.py), primera prevedbe znanih problemov (Hadamardove matrike in sudoku) na SAT, SAT solverja (dpll.py) ter primere uporabe (datoteka Primeri.py).
 
@@ -12,7 +12,7 @@ V modulu se nahajajo datoteke:
 + <b>Izjave.py</b> (osnovno ogrodje za delo z logičnimi izrazi)
 + <b>Primeri.py</b> (primeri uporabe)
 + <b>Sudoku.py</b> (prevedba sudoku na SAT problem)
-+ <b>dpll.py</b> (SAT solver)
++ <b>DPLL_rok.py</b> (SAT solver - DPLL algoritem)
 
 ##Uporaba
 ###Testno okolje
@@ -61,8 +61,10 @@ Sudoku.py vsebuje fukncijo <b>sudoku(sez)</b>. Ta sprejme dvodimenzionalno tabel
 Poleg <b>sudoku</b> funkcije vsebuje še <b>testS()</b>, s katero lahko testiramo delovanje. Beleži se tudi čas izvajanja za reševanje sudoku problema (sestavljanje izjave za sudoku), sestavljanje izjave v CNF obliki in razlika v hitrosti delovanja obeh.
 
 ###DPLL
-Algoritem [DPLL](http://en.wikipedia.org/wiki/DPLL_algorithm) se še upira končani implementaciji.
+Algoritem [DPLL](http://en.wikipedia.org/wiki/DPLL_algorithm) vsebuje glavne funkcije <b>pozdravnaMetoda()</b>, ki nam razloži način klica DPLL algoritma in primere klicev. Algoritem DPLL sicer kličemo z ukazom "DPLL(izjava)", kjer je izjava sestavljena iz And, Or in Not operatorjev in se sklada s terminologijo v datoteki Izjave.py.
+
+Testni primeri se nahajajo v funkciji <b>getTestIzjava(N)</b>, kjer je N številka testnega primera in lahko zavzema vrednosti med 0 in 10.
 
 ###Primeri
 
-Tu se nahajajo primeri uporabe za Izjave.py, Hadamard.py, Sudoku.py in CNF.py. Ob zagonu datoteke, se izvedejo primeri uporabe za Izjave (primeri za And, Or, Not, CNF in NNF), Sudoku (primer za sudoku velikosti 4x4 in 9x9) ter Hadamardovo matriko (primer za velikost 2 in 4). Za sudoku in Hadamardove matrike se beleži še čas izvajanja programa.
+Tu se nahajajo primeri uporabe za Izjave.py, Hadamard.py, Sudoku.py, CNF.py in DPLL_rok.py. Ob zagonu datoteke, se izvedejo primeri uporabe za Izjave (primeri za And, Or, Not, CNF in NNF), Sudoku (primer za sudoku velikosti 4x4 in 9x9) ter Hadamardovo matriko (primer za velikost 2 in 4). Za sudoku in Hadamardove matrike se beleži še čas izvajanja programa.
