@@ -90,13 +90,23 @@ def primerHadamard():
 
 # Primer uporabe za DPLL algoritem
 def primerDPLL():
-	izjava = And([Or([y, Not(q)]), Or([y, Not(z)]), Or([x, Not(y)]), Or([y,z,q]), Or([x,Not(z)]), Or([x,Not(q)])])
+    y = Var('y')
+	q = Var('q')
+	z = Var('z')
+	x = Var('x')
+	izjava1 = And([Or([y, Not(q)]), Or([y, Not(z)]), Or([x, Not(y)]), Or([y,z,q]), Or([x,Not(z)]), Or([x,Not(q)])])
+	print('1. Izjava: ', izjava1)
 	t0 = time.clock()
-	a = DPLL(izjava)
+	a = DPLL(izjava1)
 	t01 = time.clock() - t0
-	print('1. Izjava: ', izjava)
-	print('Cas za resevanje izjave z DPLL algoritmom: ', t01)
-
+	print('Cas za resevanje izjave z DPLL: ', t01)
+	izjava2 = sudoku([[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]])
+	print('2. Sudoku: ')
+	t1 = time.clock()
+	b = DPLL(izjava2)
+	t11 = time.clock() - t1
+	print('Cas za resevanje sudoku z DPLL: ', t11)
+	
 print('IZJAVE')
 primerIzjave()
 print('SUDOKU')

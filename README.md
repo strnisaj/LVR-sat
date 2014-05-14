@@ -67,4 +67,4 @@ Testni primeri se nahajajo v funkciji <b>getTestIzjava(N)</b>, kjer je N števil
 
 ###Primeri
 
-Tu se nahajajo primeri uporabe za Izjave.py, Hadamard.py, Sudoku.py, CNF.py in DPLL_rok.py. Ob zagonu datoteke, se izvedejo primeri uporabe za Izjave (primeri za And, Or, Not, CNF in NNF), Sudoku (primer za sudoku velikosti 4x4 in 9x9) ter Hadamardovo matriko (primer za velikost 2 in 4). Za sudoku in Hadamardove matrike se beleži še čas izvajanja programa.
+Tu se nahajajo primeri uporabe za Izjave.py, Hadamard.py, Sudoku.py, CNF.py in DPLL.py. Ob zagonu datoteke, se izvedejo primeri uporabe za Izjave (primeri za And, Or, Not, CNF in NNF), Sudoku (primer za sudoku velikosti 4x4 in 9x9), Hadamardovo matriko (primer za velikost 2 in 4) ter DPLL (primer za neko izjavo in 9x9 sudoku). Za sudoku, Hadamardove matrike in DPLL se beleži še čas izvajanja programa.
