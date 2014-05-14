@@ -2,9 +2,8 @@
 from Izjave import *
 from CNF import *
 
-# funkcija sprejme dva seznama. Seznam sez predstavlja neresen sudoku z nekaterimi ze vpisanimi stevilkami,
-# seznam sezR pa resen sudoku, ki ga predstavlja sez. Funkcija vrne izjavo, ki je resnicna, ce je sezR res resen
-# sez in neresnicna, ce to ni res.
+# Funkcija sprejme seznam sez, ki predstavlja neresen sudoku z nekaterimi ze vpisanimi stevilkami.
+# Funkcija vrne izjavo, ki je resnicna, ce je podan sudoku resljiv.
 def sudoku(sez):
     n = len(sez)
     m = int(n**0.5)
@@ -17,7 +16,7 @@ def sudoku(sez):
     spremenK = []
     for i in range(n):
         spremen.append([])
-        if i<m:
+        if i < m:
             spremenK.append([])
         for j in range(n):
             spremen[i].append([])
@@ -29,14 +28,14 @@ def sudoku(sez):
                 if len(spremenK[i//m][j//m]) < n:
                     spremenK[i//m][j//m].append([])
                 spremenK[i//m][j//m][k-1].append(x)                      
-    # Sestavimo izjavo: "V vsakem polju (i,j) je zapisano vsaj eno število k od 1 do n."
+    # Sestavimo izjavo: "V vsakem polju (i,j) je zapisano vsaj eno stevilo k od 1 do n."
     seznam1 = []
     for i in range(n):
         for j in range(n):
             seznam1.append(Or(spremen[i][j]))
     izjava1 = And(seznam1)
 
-    # Sestavimo izjavo: "V nobenem polju (i,j) nista zapisani dve števili."
+    # Sestavimo izjavo: "V nobenem polju (i,j) nista zapisani dve stevili."
     seznam2 = []
     for i in range(n):
         for j in range(n):
@@ -47,9 +46,8 @@ def sudoku(sez):
             seznam2.append(And(seznam21))
     izjava2 = And(seznam2)
     
-    # Sestavimo izjavo: "rešen in nerešen sudoku imata se strinjata na mestih, kjer so
-    #                     v nerešenm sudokuju že vpisana števila"  
-    
+    # Sestavimo izjavo: "resen in neresen sudoku imata se strinjata na mestih, kjer so
+    #                     v neresenm sudokuju ze vpisana stevila" 
     seznam3 = []
     for i in range(n):
         for j in range(n):
@@ -57,7 +55,7 @@ def sudoku(sez):
                 seznam3.append(spremen[i][j][sez[i][j]-1])
     izjava3 = And(seznam3)
 
-    # Sestavimo izjavo: "V vsaki vrstici so sama razlièna števila"
+    # Sestavimo izjavo: "V vsaki vrstici so sama razlicna stevila"
     seznam4 = []
     for i in range(n):
         for j in range(n):
@@ -66,7 +64,7 @@ def sudoku(sez):
                     seznam4.append(Not(And([spremen[i][j][k-1],spremen[i][l][k-1]])))
     izjava4 = And(seznam4)
 
-    # Sestavimo izjavo: "V vsakem stolpcu so sama razlièna števila"
+    # Sestavimo izjavo: "V vsakem stolpcu so sama razlicna stevila"
     seznam5 = []
     for j in range(n):
         for i in range(n):
@@ -75,7 +73,7 @@ def sudoku(sez):
                     seznam5.append(Not(And([spremen[i][j][k-1],spremen[l][j][k-1]])))
     izjava5 = And(seznam5)
 
-    # Sestavimo izjavo: "V vsakem m*m kvadratku se vsako število pojavi natanko enkrat"
+    # Sestavimo izjavo: "V vsakem m*m kvadratku se vsako stevilo pojavi natanko enkrat"
     seznam6 = []
     for i in range(m):
         for j in range(m):
@@ -86,20 +84,22 @@ def sudoku(sez):
     izjava6 = And(seznam6)
 
     return And([izjava1,izjava2,izjava3,izjava4,izjava5,izjava6])
-
 	 
 def testS():
-   a = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])
-   b = sudoku([[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]])
-   print('Izjava za sudoku:')
-   t0 = time.clock()
-   print(b)
-   print('pretekel cas: ',time.clock()-t0)
-   print('Izjava za sudoku v CNF obliki:')
-   t0 = time.clock()
-   print(CNF.CNF(b))
-   print('pretekel cas: ',time.clock()-t0)
-
+    a = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])
+    print('1. Izjava za sudoku:')
+    t0 = time.clock()
+    b = sudoku([[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]])
+    t01 = time.clock() - t0
+    print('Pretekel cas: ', t01)
+    print(b)
+    print('2. Izjava za sudoku v CNF obliki:')
+    t1 = time.clock()
+    c = CNF(sudoku([[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]]))
+    t11 = time.clock() - t1
+    print('Pretekel cas: ', t11)
+    print(c)
+    print('Casovna razlika med 1. in 2.: ', t01 - t11)
 
 def valuacija():
     s = [[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]]

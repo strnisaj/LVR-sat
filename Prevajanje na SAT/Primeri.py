@@ -85,10 +85,7 @@ def primerHadamard():
     print('Izjava za Hadamardovo matriko b: ', b)
     print('Cas za Hadamardovo matriko b: ', t1);
     c = CNF(b)
-    print('Izjava za Hadamardovo matriko v CNF obliki: ', c)
-
-def primerDPLL():
-	
+    print('Izjava za Hadamardovo matriko v CNF obliki: ', c)	
 
 print('IZJAVE')
 primerIzjave()
