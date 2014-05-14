@@ -53,16 +53,16 @@ def hadamard(sez):
 def testH():
     a = hadamard([[1,1,1,1],[-1,1,-1,1],[-1,-1,1,1],[1,-1,-1,-1]])
     print('1. Izjava za Hadamardovo matriko:')
-	t0 = time.clock()
+    t0 = time.clock()
     b = hadamard([[1,1],[-1,1]])
-	t01 = time.clock() - t0
-	print('Pretekel cas: ', t01)
-	print(b)
+    t01 = time.clock() - t0
+    print('Pretekel cas: ', t01)
+    print(b)
     print('2. Izjava za Hadamardovo matriko v CNF obliki:')
-	t1 = time.clock()
-	c = CNF(hadamard([[1,1],[-1,1]]))
-	t11 = time.clock() - t1
-	print('Pretekel cas: ', t11)
+    t1 = time.clock()
+    c = CNF(hadamard([[1,1],[-1,1]]))
+    t11 = time.clock() - t1
+    print('Pretekel cas: ', t11)
     print('Razlika med 1. in 2.: ', t01 - t11)
 	#print(CNF.CNF(b).poenostavi())
 

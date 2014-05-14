@@ -41,10 +41,10 @@ def test():
     # iz = Izjave.Or([Izjave.And([a,b]),Izjave.And([c,d]),d])
     # iz1 = Izjave.Not(Izjave.And([Izjave.Or([Izjave.Not(a),b]),c]))
     # iz2 = Izjave.Or([Izjave.Or([a,Izjave.And([c,d])]),d])
-	izjava = Not(And([Or([Not(a),b]),Not(And([c,a])),Not(Or([Not(b),a,Not(c)]))]))
-	print('Izjava: ', izjava)
-	t0 = time.clock()
-	izcnf = CNF(izjava)
-	t01 = time.clock() - t0
-	print('Izjava v CNF obliki: ', izcnf)
-	print('Pretekel cas: ', t01)
+    izjava = Not(And([Or([Not(a),b]),Not(And([c,a])),Not(Or([Not(b),a,Not(c)]))]))
+    print('Izjava: ', izjava)
+    t0 = time.clock()
+    izcnf = CNF(izjava)
+    t01 = time.clock() - t0
+    print('Izjava v CNF obliki: ', izcnf)
+    print('Pretekel cas: ', t01)

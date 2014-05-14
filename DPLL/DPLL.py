@@ -1,6 +1,6 @@
 from Izjave import *
 from Sudoku import *
-#from Hadamard import *
+from Hadamard import *
 from CNF import *
 import time
 
