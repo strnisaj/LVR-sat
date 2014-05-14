@@ -1,6 +1,6 @@
-﻿from Izjave import *
+from Izjave import *
 from Sudoku import *
-from Hadamard import *
+#from Hadamard import *
 from CNF import *
 import time
 
@@ -10,23 +10,27 @@ lockSolutionVals = False
 
 def DPLL(izjava):
 
-    # poresetiram prejšno rešitev
+    # Metoda dobi izjavo, ki jo obdela s pomočjo funkcije prepareStatement(izjava)
+    # Če izjava ni na začetku False (zaradi praznega protislovja), potem kličemo rekurzivno metodo rec_DPLL(izjava, varValues)
+    # FIXME: prepareStatement naj preveri še, če ni izjava False zaradi kakšnega praznega OR-a
+
     global solutionVals
-    global lockSolutionVals
-    solutionVals = {}
-    lockSolutionVals = False
-
+    solution = False
+    
     startTime = time.time()
-
-    izjava = CNF(izjava)
-    izjava = izjava.poenostavi().vrni()     #dobim [ ... (...) ...]
-    izjava = get_2D_list(izjava)            #dobim [ ... [...] ...]
-    print('Izjava: ', izjava)
-
-    izjava = removeTrueSantences(izjava)
-    izjava = sortByLength(izjava)
-    varValues = {}                          # Začetne vrednosti spremenljivk
-    solution = rec_DPLL(izjava, varValues) # Klic rekurzivne metode
+    dataForDPLL = prepareStatement(izjava)      # Pripravimo izjavo. Metoda vrne [izjava, varValues], kjer so vrednosti 100% pravilne
+    
+    if (dataForDPLL != False):
+        izjava = dataForDPLL[0]
+        varValues = dataForDPLL[1]
+        
+        print('####### BEFORE REC ########')
+        print('Izjava: ', izjava)
+        print('VarValues: ', varValues)
+        print('_________________________________')
+        solution = rec_DPLL(izjava, varValues)  # klic rekurzivne metode
+        
+        
     print('Vrnjena rešitev: ', solution)
     print('Vrednosti: ' , solutionVals)
 
@@ -34,29 +38,140 @@ def DPLL(izjava):
     timePassed = endTime - startTime
     print('Time: ', timePassed)
 
+
+
+def prepareStatement(izjava):
+
+    # Metoda sprejme izjavo in jo pripravi takole:
+    #   - izjavo pretvori v CNF obliko
+    #   - izjavo pretvori v seznam seznamov oblike [ ... [ ... ] ...]
+    #   - odstrani vse proste spremenljivke
+    #   - preveri, da se ne zgodi primer (X and notX)
+    #   - pobriše vse True izjave oblike (X or notX)
+    #   - najde vse proste spremenljivke
+    # Metoda vrne seznam, v katerem je izjava in vrednosti spremenljivk
+    # Če je primer na osnovi zgornjih ugotovitev nerešljiv, potem metoda vrne False
+
+
+    # poresetiram prejšno rešitev
+    global solutionVals
+    global lockSolutionVals
+    global newPureValFound
+    solutionVals = {}
+    lockSolutionVals = False
+    newPureValFound = True
+
+    izjava = CNF(izjava)                                    # pretvori izjavo v CNF
+    izjava = izjava.poenostavi().vrni()                     # dobim [ ... (...) ...]
+    #print('IZJAVA: ' ,izjava)
+    izjava = get_2D_list(izjava)                            # dobim [ ... [...] ...]
+    varValues = {}                                          # Začetne vrednosti spremenljivk
+    izjava = removeTrueSantences(izjava)                    # metoda odstrani podizjave tipa (X or notX)
+
+
+
+    #print('IZJAVA: ' ,izjava)
+    
+    # PONOVNO PREVERJAMO PROSTE SPREMENLJIVKE, DOKLER JE KAKŠNA ŠE PROSTA!!
+    while (True):
+        #print('________________________')
+        #print('Izjava: ' , izjava)
+        changes = 0                                             # stevec za ustavitveni pogoj
+        getInfo = removeSingleVars(izjava)                      # metoda vrne [sprmenjenaIzjava, slovarProstihSpremenljivk]
+        if getInfo[1] == False:
+            print('ERROR: getInfo[1] == False ..... returning False!!!')
+            return False
+        else:
+            izjava = getInfo[0]                                 # izjava brez prostih spremenljivk
+            singleVarValues = getInfo[1]                        # slovar vrednosti prostih spremenljivk. Lahko je False, če je bila oblika (X and notX)
+            varValues = concatDicts(varValues, singleVarValues) # metoda združi seznama obstoječih in novih vrednosti spremenljivk (sicer vrne false)
+            if varValues == False:                              # če je prišlo do protislovja (X and notX) potem ni rešitve in vrnemo False
+                print('ERROR: varValues == False ..... returning False!!!')
+                return False
+            
+            #print('New vals: ' , varValues)
+            izjava = processStatement(izjava, varValues)        # metoda odstrani OR-e, ki so True in spremenljivke znotraj OR-ov, ki so False
+            #print('New izjava: ', izjava)
+        if (getInfo[1] != {}):
+            changes = changes + 1
+        if (changes == 0):
+            #print('breaking.....')
+            break
+    
+
+
+    # testni izpis števila prostih in čistih spremenljivk, ki smo jih našli
+    #steviloSpremenljivk = 0
+    #for keys in varValues:
+    #    steviloSpremenljivk = steviloSpremenljivk + 1
+    #print('___najdenih cistih/prostih spremenljivk: ', steviloSpremenljivk)
+
+
+       
+    # PREVERIMO ČISTE SPREMENLJIVKE
+    # Spodnja while zanka pridobiva čiste spremenljivke, poenostavlja izjavo in to ponavalja, dokler je kakšna spremenljivka čista
+    while (newPureValFound == True):
+        #print('.................')
+        pureVals = getPureVals(izjava)                  # pridobim slovar čistih spremenljivk
+        varValues = concatDicts(varValues, pureVals)    # združim obstoječe spremenljivke s čistimi
+
+        #preverimo, da nismo prišli do protislovja:
+        if varValues == False:
+            print('################## WARNING :::: pureVals is returning FALSE!!!')
+            return False
+        izjava = processStatement(izjava, varValues)    # metoda odstrani OR-e, ki so True in spremenljivke znotraj OR-ov, ki so False
+        #print('in while izjava: ', izjava)
+    
+    #print('Izjava 2D: ' , izjava)
+
+    #print('vals after pure: ', varValues)
+
+    #test = isThereAnySingleVar(izjava)
+    #print('any single var left: ', test)
+    izjava = sortByLength(izjava)                       # sortiranje izjave po dolžini podizjav (naraščajoče)
+
+     
+
+    # testni izpis števila prostih in čistih spremenljivk, ki smo jih našli
+    #steviloSpremenljivk = 0
+    #for keys in varValues:
+    #    steviloSpremenljivk = steviloSpremenljivk + 1
+    #print('___najdenih cistih/prostih spremenljivk: ', steviloSpremenljivk)
+
+    izjava = sortByLength(izjava)
+
+    # vrnemo seznam, ki vsebuje na rekurzijo pripravljeno izjavo in slovar vrednosti spremenljivk (te niso več zastopane v izjavi)
+    return [izjava, varValues]
+
+
+def isThereAnySingleVar(izjava):
+
+    for subizjava in izjava:
+        if len(subizjava) == 1:
+            return True
+
+
 def rec_DPLL(izjava, varValues):
 
     # Metoda najprej preveri, če je kakšna spremenljivka čista. Nato poenostavi izjavo in naredi dve kopiji izjave
     # Vzame se prva spremenljivka iz izjave in se nastavi na True. Sprocesira se kopija_1 izjave z novo vrednostjo spremenljivke True
     # Vzame se prva spremenljivka iz izjave in se nastavi na False. Sprocesira se kopija_2 izjave z novo vrednostjo spremenljivke False
 
+    #print('Break point 1')
+
+    print('')
+    print('_______rec_DPLL()____________')
+    print('Recived izjava: ' , izjava)
+    print('Recived varValues: ' , varValues)
+    
 
     # Če smo dobili že rešitev, potem ne potrebujemo več preverjanja
     global lockSolutionVals
     if lockSolutionVals == True:
+        print('LOCK = LOCKED')
         return True
 
-    # Spodnja while zanka pridobiva čiste spremenljivke, poenostavlja izjavo in to ponavalja, dokler je kakšna spremenljivka čista
-    # Če pride do protislovja v vrednostih, potem vrne False #zaenkrat še ne, ampak naj....
-    global newPureValFound
-    while (newPureValFound == True):
-        pureVals = getPureVals(izjava)                  # pridobim slovar čistih spremenljivk
-        varValues = concatDicts(varValues, pureVals)    # združim obstoječe spremenljivke s čistimi
-
-        #preverimo, da nismo prišli do protislovja:
-        if varValues == False:
-            return False
-        izjava = processStatement(izjava, varValues)    # metoda odstrani OR-e, ki so True in spremenljivke znotraj OR-ov, ki so False
+    #print('Values before getting pureVals: ', varValues)
 
     # Preverimo, če smo prišli do rešitv=true
     if is_AND_empty(izjava):
@@ -71,6 +186,7 @@ def rec_DPLL(izjava, varValues):
     if is_OR_empty(izjava):
         return False
 
+    #print('Break point 5')
 
     firstVar = getFirstVar(izjava)      # pridobimo prvo spremenljivko
     izjava_1 = copyStatement(izjava)    # prekopiramo izjavo
@@ -78,22 +194,97 @@ def rec_DPLL(izjava, varValues):
     vals_1 = copyVarValues(varValues)   # prekopiramo vrednosti
     vals_2 = copyVarValues(varValues)   # prekopiramo vrednosti
     vals_1[firstVar] = True             # enkrat vrednost prve spremenljivke nastavimo na True
-    vals_2[firstVar] = False            # enkrat vrednost prve spremenljivke nastavimo na False
 
+    print('')
+    print('Vals_1: ' , vals_1)
+    print('Izjava_1: ' , izjava_1)
     izjava_1 = processStatement(izjava_1, vals_1)
-    izjava_2 = processStatement(izjava_2, vals_2)
+    print('Sprocesirana: ' , izjava_1)
 
+    
+    
 
     if (rec_DPLL(izjava_1, vals_1) != False):  # rekurzivni klic
         return True
+
+    print('GREM NA FALSE')
+    vals_2[firstVar] = False
+    print('')
+    print('Vals_2: ' , vals_2)
+    print('Izjava_2: ', izjava_2)
+    izjava_2 = processStatement(izjava_2, vals_2)
+    print('Sprocesirana: ' , izjava_2)
+
+    
+    
     if (rec_DPLL(izjava_2, vals_2) != False):  # rekurzivni klic
         return True
 
     return False
 
-def getFirstVar(izjava): 
-    x = izjava[0][0].vrni()
-    return x
+
+def getPureVals(izjava):
+
+    # Metoda se sprehodi čez izjavo in poišče čiste spremenljivke.
+    # Metoda vrne slovar čistih spremenljivk, ki jih nastavi na true (x) oz. false (not x)
+
+    #print('WELCOME TO GET-PURE-VALS-FUNCTION')
+    #print('recived izjava: ', izjava)
+
+    pureVals = {}
+    varsInStatement = {}
+    global newPureValFound
+    newPureValFound = False
+
+    #print('Welcome to getPureVars...................... ')
+
+    #napolnim slovar zastopanosti spremenljivk: 1: X .... 2: notX ..... 3: (X and notX)
+    for subIzjava in izjava:
+        for var in subIzjava:
+            #če ni spremenljivke v seznamu, jo dodamo
+            #print('thisVar == ', var)
+            if ((var.vrni() in varsInStatement) == False):
+                #print('VAR IS NOT INSIDE VARS-IN-STATEMENT!!!! ', varsInStatement )
+                #if var.poenostavi() == var.vrni(): #XXX
+                if isinstance(var, Var):
+                    varsInStatement[var.vrni()] = 1
+                else:
+                    varsInStatement[var.vrni()] = 2
+            #če je spremenljivka že v seznamu, preverimo katero vrednost ima
+            else:
+                #print('VAR IS INSIDE VARS-IN-STATEMENT!!! ', varsInStatement)
+                vrednost = varsInStatement[var.vrni()]
+                #if var.poenostavi() == var.vrni() and vrednost == 2: #XXX
+                if ((vrednost == 2) and (isinstance(var, Var))):
+                    varsInStatement[var.vrni()] = 3
+                #elif var.poenostavi() != var.vrni() and vrednost == 1: #XXX
+                elif ( (vrednost == 1) and (isinstance(var, Not)) ):
+                    varsInStatement[var.vrni()] = 3
+                else:
+                    #print('XXXX: this should not have happened!!! (getPureVars function)')
+                    pass
+
+    
+    #ugotovimo, kate key-e je potrebno odstraniti
+    keysToBeRemoved = []
+    for key in varsInStatement:
+        if (varsInStatement[key] == 3):
+            keysToBeRemoved.append(key)
+
+    #odstranimo key-e
+    for i in keysToBeRemoved:
+        varsInStatement.pop(i)
+
+    #napolnimo slovar čistih spremenljivk
+    for key in varsInStatement:
+        newPureValFound = True
+        if varsInStatement[key] == 1:
+            pureVals[key] = True
+        else:
+            pureVals[key] = False
+
+    return pureVals
+
 
 def processStatement(izjava, vals):
 
@@ -106,6 +297,12 @@ def processStatement(izjava, vals):
     toBeRemoved_OR = []
     toBeRemoved_AND = []
     indexAND = -1
+
+    #print('__________________________________________________________________________')
+    #print('*************** Welcome to processStatement(izjava, vals) ***************')
+    #print('Recived izjava: ', izjava)
+    #print('Recived vals: ' , vals)
+    #print('@@@@@@@@@@@@@@@@@@@@@')
 
     for subIzjava in izjava:
         indexAND = indexAND + 1
@@ -154,7 +351,24 @@ def processStatement(izjava, vals):
     for i in range(0, len(toBeRemoved_AND)):
         del izjava[toBeRemoved_AND[i]]
 
+    #print('Returned izjava: ' , izjava)
+    #print('Returned vals: ', vals)
+    #print('__________________________________________________________________________')
+
+
+    '''
+    #TESTIRAM:
+    for subIzjava in izjava:
+        for i in subIzjava:
+            if i in vals:
+                print('ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR')
+    '''
+    
     return izjava
+
+def getFirstVar(izjava): 
+    x = izjava[0][0].vrni()
+    return x
 
 def copyStatement(izjava):
 
@@ -178,56 +392,6 @@ def copyVarValues(varValues):
         copy[keys] = varValues[keys]
 
     return copy
-
-def getPureVals(izjava):
-
-    # Metoda se sprehodi čez izjavo in poišče čiste spremenljivke.
-    # Metoda vrne slovar čistih spremenljivk, ki jih nastavi na true (x) oz. false (not x)
-
-    pureVals = {}
-    varsInStatement = {}
-    global newPureValFound
-    newPureValFound = False
-
-    #napolnim slovar zastopanosti spremenljivk: 1: X .... 2: notX ..... 3: (X and notX)
-    for subIzjava in izjava:
-        for var in subIzjava:
-            #če ni spremenljivke v seznamu, jo dodamo
-            if (var.vrni() in varsInStatement) == False:
-                if var.poenostavi() == var.vrni():
-                    varsInStatement[var.vrni()] = 1
-                else:
-                    varsInStatement[var.vrni()] = 2
-            #če je spremenljivka že v seznamu, preverimo katero vrednost ima
-            else:
-                vrednost = varsInStatement[var.vrni()]
-                if var.poenostavi() == var.vrni() and vrednost == 2:
-                    varsInStatement[var.vrni()] = 3
-                elif var.poenostavi() != var.vrni() and vrednost == 1:
-                    varsInStatement[var.vrni()] = 3
-                else:
-                    pass
-
-    
-    #ugotovimo, kate key-e je potrebno odstraniti
-    keysToBeRemoved = []
-    for key in varsInStatement:
-        if (varsInStatement[key] == 3):
-            keysToBeRemoved.append(key)
-
-    #odstranimo key-e
-    for i in keysToBeRemoved:
-        varsInStatement.pop(i)
-
-    #napolnimo slovar čistih spremenljivk
-    for key in varsInStatement:
-        newPureValFound = True
-        if varsInStatement[key] == 1:
-            pureVals[key] = True
-        else:
-            pureVals[key] = False
-
-    return pureVals
 
 def get_2D_list(izjava):
 
@@ -280,11 +444,25 @@ def concatDicts(oldValues, newValues):
     # Metoda preme 2 slovarja starih in novi vrednosti spremenljivk in jih združi
     # Metoda vrne slovar združenih spremenljivk ali False, če jih ne more združiti (ker pride do protislovja)
 
+    '''
+    print('WELCOME TO CONCAT-DICTS')
+    print('')
+    print('OLD-VALUES')
+    print('')
+    print(oldValues)
+    print('NEW-VALUES')
+    print(newValues)
+    print('')
+    '''
+    
     for key in newValues:
         #če je že vsebovan
         if key in oldValues:
             #če se stara in nova vrednost razlikujeta
             if oldValues[key] != newValues[key]:
+                #print('tuki pride do errorja......')
+                #print('oldValues[' , key, '] = ', oldValues[key])
+                #print('newValues[' , key, '] = ', newValues[key])
                 return False
         #če ni vsebovan, dodamo novo vrednost med stare vrednosti
         else:
@@ -297,6 +475,7 @@ def removeSingleVars(izjava):
     # Metoda gre čez izjavo in iz nje odstrani vse 'proste' spremenljivke, ter jih nastavi na True
     # Metoda vrne spremenljeno izjavo in slovar prostih spremenljivk, ki so nastavljene na ustrezno vrednost
     # Metoda iz izjave izbriše te proste podizjave
+    # Metoda hkrati preveri, da ni prišlo do protislovja oblike (X and notX)
     
     toBeRemoved = []
     singleVars = []
@@ -321,6 +500,24 @@ def removeSingleVars(izjava):
             singleVarsDict[i.vrni()] = True
         if isinstance(i, Not):
             singleVarsDict[i.vrni()] = False
+
+    # preverimo, da ni prišlo do protislovja oblike (X and notX)
+    for i in range(0, len(singleVars)-1):
+        if singleVarsDict == False:
+            break
+        for j in range((i+1), len(singleVars)):
+            #če se pojavi x and notx
+            #if (singleVars[i].vrni() == singleVars[j].vrni()) and (singleVars[i].poenostavi() != singleVars[j].poenostavi()):
+            if ( (isinstance(singleVars[i], Var) and isinstance(singleVars[j], Not)) or (isinstance(singleVars[i],Not) and isinstance(singleVars[j], Var))):
+                print('Tukaj nastane problem: ')
+                print('singleVars[i].poenostavi() == ', singleVars[i].poenostavi())
+                print('singleVars[j].poenostavi() == ', singleVars[j].poenostavi())
+                print('singleVars[i].vrni() == ', singleVars[i].vrni())
+                print('singleVars[j].vrni() == ', singleVars[j].vrni())
+                print('i = ', i)
+                print('j = ',j)
+                singleVarsDict = False
+                break
 
     return [izjava, singleVarsDict]
 
@@ -366,6 +563,7 @@ def getTestIzjava(caseNumber):
     y = Var('Y')
     z = Var('Z')
     q = Var('Q')
+    a = Var('A')
 
     or_1 = Or([x,Not(Not(y)),Not(z)])
     or_2 = Or([Not(x),Not(y)])
@@ -396,6 +594,10 @@ def getTestIzjava(caseNumber):
     elif caseNumber == 10:
         #testiranje za pureValues ker sta tuki 2xpure, ostalo vse odpade
         i = And([ Or([y, Not(q)]) , Or([y, Not(z)]) , Or([x, Not(y)]) , Or([y,z,q]) , Or([x,Not(z)]) , Or([x,Not(q)]) ])
+    elif caseNumber == 666:
+        i = And([ Not(x), Or([x,z]) ])
+    elif caseNumber == 777:
+        i = And([ Not(x), Or([Not(x), z, Not(y)]) , Or([x,z]) , Or([Not(z), y]), Or([q,a]) , Or([Not(q), a]) , Or([q, Not(a)]) , Or([Not(q),Not(a)]) ])
     else:
         i = or_4
         i = And([Or([x,Not(y),Not(z)]) , Or([Not(x),Not(y)]) , Or([x,z]) , Or([Not(x),Not(q)])])
@@ -403,10 +605,10 @@ def getTestIzjava(caseNumber):
     return i
     
 def pozdravnaMetoda():
-    print('******************************************************')
+    print('************************************************************************************************************')
     print('Pozdravljeni v algoritmu DPLL')
     print('Za zagon algoritma poklicite funkcijo: DPLL(izjava), ki ji podate izjavo')
-    print('Primer izjave: ((X or Y) and (Y or Not(Z))) := And( [ Or([ X, Y ]) , Or([ Y, Not(Z) ]) ] )')
+    print('Primer izjave: ((X or Y) and (Y or notZ)) := And( [ Or([ X, Y ]) , Or([ Y, Not(Z) ]) ] )')
     print('Za preverjanje pravilnosti delovanja sta spodaj prilozena copy/paste testna primera')
     
     print('izjava=getTestIzjava(0) -----> ((X or notY or notZ) and (notX or notY) and (X or Z) and (notX or notQ))')
@@ -423,6 +625,16 @@ def pozdravnaMetoda():
     print('')
     print('Primer za sudoku: izjava = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])')
     print('Izjavo lahko zgradite tudi sami, vendar je potrebno ustvariti vsako spremenljivko, ki jo boste uporabljali (glej Izjave.py)')
-    print('******************************************************')
+    print('************************************************************************************************************')
+
+    izjava = sudoku([[1,2,0,0],[3,0,1,0],[0,1,0,3],[0,0,2,1]])
+    #izjava = sudoku([[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]])
+    #izjava = getTestIzjava(777)
+    DPLL(izjava)
 
 pozdravnaMetoda()
+
+
+
+
+
