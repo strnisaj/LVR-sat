@@ -5,7 +5,7 @@ from Izjave import *
 from Sudoku import *
 from Hadamard import *
 from CNF import *
-from DPLL_rok import *
+from DPLL import *
 
 # Primer uporabe za Izjave
 def primerIzjave():
