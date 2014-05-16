@@ -103,7 +103,9 @@ class And():
             return And(sez)
 
     def poenostavi(self): 
-        #self.nastavi(list(set(self.izjave())))
+        if len(self.izjave) == 1:
+            return self.izjave[0].poenostavi()
+        self.izjave = [i.poenostavi() for i in self.izjave] 
         for i in self.izjave:
             if type(i) is Tru:
                 self.izjave.remove(i)
@@ -111,10 +113,8 @@ class And():
             elif type(i) is Fal:
                 return Fal()
             elif type(i) is And:
-                self.nastavi(self.izjave[:self.izjave.index(i)]+i.vrni()+self.izjave[self.izjave.index(i)+1:])
-        if len(self.izjave) == 1:
-            return self.izjave[0].poenostavi()
-        return And([i.poenostavi() for i in self.izjave])
+                self.izjave = self.izjave[:self.izjave.index(i)]+i.vrni()+self.izjave[self.izjave.index(i)+1:]
+        return And(self.izjave)
 
 class Or():
     def __init__(self, izjave):
@@ -164,17 +164,18 @@ class Or():
             return Or(sez)
                             
     def poenostavi(self):
-        #self.nastavi(list(set(self.izjave())))
+        if len(self.izjave) == 1:
+            return self.izjave[0].poenostavi()
+        self.izjave = [i.poenostavi() for i in self.izjave] 
         for i in self.izjave:
             if type(i) is Fal:
                 self.izjave.remove(i)
+                return self
             elif type(i) is Tru:
-                return Tru()
+                return Fal()
             elif type(i) is Or:
-                 self.nastavi(self.izjave[:self.izjave.index(i)]+i.vrni()+self.izjave[self.izjave.index(i)+1:])
-        if len(self.izjave) == 1:
-            return self.izjave[0].poenostavi()
-        return Or([i.poenostavi() for i in self.izjave])
+                self.izjave = self.izjave[:self.izjave.index(i)]+i.vrni()+self.izjave[self.izjave.index(i)+1:]
+        return Or(self.izjave)
 
 class Not():
     def __init__(self,A):
