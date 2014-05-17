@@ -1,3 +1,4 @@
+import time
 # Spodnji razredi predstavljajo strukturo za predstavitev Boolovih formul.
 # Var() predstavlja spremenljivko
 # Tru() in Fal() predstavljata konstanti True in False
@@ -82,25 +83,27 @@ class And():
         self.izjave = izjave
 
     def izracun(self,val):
-        sez = []
-        for v in self.izjave:
-            vr = v.izracun(val)
-            if vr == False:
-                return False
-            elif type(vr) == Var or type(vr) == Not:
-                sez.append(vr)
-            elif type(vr) == And or type(vr) == Or:
-                vr_izjave = vr.vrni()
-                if len(vr_izjave) == 1:
-                    sez.append(vr_izjave[0])
+        izjave = self.izjave
+        length = len(izjave)
+        i=0
+        while i < length:
+            vr = izjave[i].izracun(val)
+            if type(vr) is bool:
+                if not vr:
+                    return False
                 else:
-                    sez.append(vr)
-        if not sez:
+                    izjave.remove(izjave[i])
+                    length -= 1
+                    continue
+            else:
+                izjave[i]=vr
+            i+=1
+        if not izjave:
             return True
-        elif len(sez) == 1:
-            return sez[0]
-        else:
-            return And(sez)
+        elif len(izjave) == 1:
+            return izjave[0]
+        return And(izjave)
+                
 
     def poenostavi(self): 
         if len(self.izjave) == 1:
@@ -143,25 +146,26 @@ class Or():
         self.izjave = izjave
 
     def izracun(self,val):
-        sez = []
-        for v in self.izjave:
-            vr = v.izracun(val)
-            if vr == True:
-                return True
-            elif type(vr) == Var or type(vr) == Not:
-                sez.append(vr)
-            elif type(vr) == And or type(vr) == Or:
-                vr_izjave = vr.vrni()
-                if len(vr_izjave) == 1:
-                    sez.append(vr_izjave[0])
+        izjave = self.izjave
+        length = len(izjave)
+        i=0
+        while i < length:
+            vr = izjave[i].izracun(val)
+            if type(vr) is bool:
+                if vr:
+                    return True
                 else:
-                    sez.append(vr)
-        if not sez:
-            return True
-        elif len(sez) == 1:
-            return sez[0]
-        else:
-            return Or(sez)
+                    izjave.remove(izjave[i])
+                    length -= 1
+                    continue
+            else:
+                izjave[i]=vr
+            i+=1
+        if not izjave:
+            return False
+        elif len(izjave) == 1:
+            return izjave[0]
+        return Or(izjave)
                             
     def poenostavi(self):
         if len(self.izjave) == 1:
@@ -224,6 +228,7 @@ def test():
     iz = Not(And([Or([Not(a),b]),Not(And([c,a])),Not(Or([Not(b),a,Not(c)]))]))
     iz1 = And([a,And([c,b]),Or([Not(a),Not(c)])])
     print('Poenostavitev izjave: ')
+    print('izjava: ',iz)
     t0 = time.clock()
     i = iz.poenostavi()
     print('Pretekel cas: ', time.clock() - t0)
@@ -231,8 +236,8 @@ def test():
     print('###############################')
 
     print('Vrednost izjave: ')
-    val = {'A':False,'B':True,'C':True}
-    val1 = {'A':True,'B':True}
+    val = {a:False,b:True,c:True}
+    val1 = {a:False,b:True}
     t0 = time.clock()
     j = iz.izracun(val)
     print('Pretekel cas: ', time.clock() - t0)

@@ -79,3 +79,27 @@ def testS():
     print([i.izracun({'A':True,'B':False,'C':True}) for i in sez])
     print(stetje(2,sez))
     print(stetje(2,sez).izracun({'A':True,'B':False,'C':True}))
+
+# Preveri, ce je izjava resnicna natanko tedaj, ko je dana matrika h res hadamardova.
+def valuacija():
+    h = [[1,1],[1,-1]]
+    had = hadamard(h)
+    hadCNF = CNF(had)
+    hadCNFp = hadCNF.poenostavi()
+    spremen = had.var()
+    val = {}
+    for x in spremen:
+        ime = x.vrni_ime()
+        i = int(ime[2])
+        j = int(ime[4])
+        if len(ime) == 9:
+            n = int(ime[6]+ime[7])
+        else:
+            n = int(ime[6])
+        if h[i][j]==n:
+            val[x]= True
+        else:
+            val[x]= False
+    print(had.izracun(val))
+    print(hadCNF.izracun(val))
+    print(hadCNFp.izracun(val))
