@@ -81,7 +81,7 @@ def primerHadamard():
     print('Cas za Hadamardovo matriko a: ',t1)
     # Malo tezji primer za Hadamardovo matriko
     t0 = time.clock()
-    b = hadamard([[1,1,1,1],[-1,1,-1,1],[-1,-1,1,1],[1,-1,-1,-1]])
+    b = hadamard(4)
     t1 = time.clock() - t0
     print('Izjava za Hadamardovo matriko b: ', b)
     print('Cas za Hadamardovo matriko b: ', t1);
@@ -106,13 +106,13 @@ def primerDPLL():
 	b = DPLL(izjava2)
 	t11 = time.clock() - t1
 	print('Cas za resevanje sudoku z DPLL: ', t11)
-	izjava3 = hadamard([[1,1],[-1,-1]])
+	izjava3 = hadamard(2)
 	print('3. Hadamardova matrika velikosti 2x2: ')
 	t2 = time.clock()
 	c = DPLL(izjava3)
 	t21 = time.clock() - t2
 	print('Cas za resevanje Hadamardove matrika z DPLL: ', t21)
-	izjava4 = hadamard([[1,1,1,1],[-1,1,-1,1],[-1,-1,1,1],[1,-1,-1,-1]])
+	izjava4 = hadamard(4)
 	print('4. Hadamardova matrika velikosti 4x4: ')
 	t3 = time.clock()
 	c = DPLL(izjava4)

@@ -29,9 +29,9 @@ Beležimo tudi čas izvajanja funkcije <b>CNF</b>.
 
 ###Hadamard
 
-Hadamard.py je sestavljen iz dveh funkcij in sicer <b>stetje(m, sez)</b> in <b>hadamard(sez)</b>.
+Hadamard.py je sestavljen iz dveh funkcij in sicer <b>stetje(m, sez)</b> in <b>hadamard(n)</b>.
 Funkcija <b>stetje</b> sprejme seznam izjav sez in število m, vrne pa izjavo, ki je resnična natanko tedaj, ko je v seznamu izjav sez resničnih natanko m izjav.
-<b>Hadamard</b> funkcija pa sprejme nxn matriko in vrne izjavo, ki je resnična natanko tedaj, ko je matrika Hadamardova.
+<b>Hadamard</b> funkcija pa sprejme velikost matrike in vrne izjavo, ki je resnična natanko tedaj, ko je matrika Hadamardova.
 
 Testiranje delovanje je izvedeno s pomočjo funkcij <b>testS()</b>, ki testira delovanje funkcije <b>stetje</b>, ter <b>testH()</b>, ki testira delovanje funkcije <b>hadamard</b>. Obe kličemo iz konzole.
 <b>testH</b> beleži še hitrost delovanja za primer sestavljanja izjave za hadamardovo matriko in za primer sestavljanja izjave za hadamardovo matriko v CNF obliki, beleži se tudi razlika v hitrosti izvajanja med obema.
