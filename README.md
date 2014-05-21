@@ -1,8 +1,10 @@
 #LVR-sat
 
+LVR-sat vsebuje tri module: CNF, DPLL in Prevajanje na SAT. Od teh je glaven DPLL, ki je predstavljen v nadaljevanju tega dokumenta. 
+
 ##DPLL
 
-Ta modul vsebuje ogrodje za delo z logičnimi izrazi (datoteka Izjave.py), primera prevedbe znanih problemov (Hadamardove matrike in sudoku) na SAT, SAT solverja (dpll.py) ter primere uporabe (datoteka Primeri.py).
+Ta modul vsebuje ogrodje za delo z logičnimi izrazi (datoteka Izjave.py), primera prevedbe znanih problemov (Hadamardove matrike in sudoku) na SAT, SAT solverja (DPLL.py) ter primere uporabe (datoteka Primeri.py).
 
 ##Datoteke
 
@@ -12,7 +14,7 @@ V modulu se nahajajo datoteke:
 + <b>Izjave.py</b> (osnovno ogrodje za delo z logičnimi izrazi)
 + <b>Primeri.py</b> (primeri uporabe)
 + <b>Sudoku.py</b> (prevedba sudoku na SAT problem)
-+ <b>DPLL_rok.py</b> (SAT solver - DPLL algoritem)
++ <b>DPLL.py</b> (SAT solver - DPLL algoritem)
 
 ##Uporaba
 ###Testno okolje
@@ -33,6 +35,8 @@ Funkcija <b>stetje</b> sprejme seznam izjav sez in število m, vrne pa izjavo, k
 
 Testiranje delovanje je izvedeno s pomočjo funkcij <b>testS()</b>, ki testira delovanje funkcije <b>stetje</b>, ter <b>testH()</b>, ki testira delovanje funkcije <b>hadamard</b>. Obe kličemo iz konzole.
 <b>testH</b> beleži še hitrost delovanja za primer sestavljanja izjave za hadamardovo matriko in za primer sestavljanja izjave za hadamardovo matriko v CNF obliki, beleži se tudi razlika v hitrosti izvajanja med obema.
+
+Opomba: Izvajanje programa za Hadamardovo matriko velikosti 4x4 je nekoliko počasnejše, zato prosimo za potrpežljivost.
 
 ###Izjave
 
@@ -67,4 +71,4 @@ Testni primeri se nahajajo v funkciji <b>getTestIzjava(N)</b>, kjer je N števil
 
 ###Primeri
 
-Tu se nahajajo primeri uporabe za Izjave.py, Hadamard.py, Sudoku.py, CNF.py in DPLL.py. Ob zagonu datoteke, se izvedejo primeri uporabe za Izjave (primeri za And, Or, Not, CNF in NNF), Sudoku (primer za sudoku velikosti 4x4 in 9x9), Hadamardovo matriko (primer za velikost 2 in 4) ter DPLL (primer za neko izjavo in 9x9 sudoku). Za sudoku, Hadamardove matrike in DPLL se beleži še čas izvajanja programa.
+Tu se nahajajo primeri uporabe za Izjave.py, Hadamard.py, Sudoku.py, CNF.py in DPLL.py. Ob zagonu datoteke, se izvedejo primeri uporabe za Izjave (primeri za And, Or, Not, CNF in NNF), Sudoku (primer za sudoku velikosti 4x4 in 9x9), Hadamardovo matriko (primer za velikost 2 in 4) ter DPLL (primer za neko izjavo, 9x9 sudoku, 2x2 in 4x4 Hadamardovo matriko). Za sudoku, Hadamardove matrike in DPLL se beleži še čas izvajanja programa.

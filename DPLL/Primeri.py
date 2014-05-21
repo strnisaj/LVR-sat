@@ -106,6 +106,18 @@ def primerDPLL():
 	b = DPLL(izjava2)
 	t11 = time.clock() - t1
 	print('Cas za resevanje sudoku z DPLL: ', t11)
+	izjava3 = hadamard([[1,1],[-1,-1]])
+	print('3. Hadamardova matrika velikosti 2x2: ')
+	t2 = time.clock()
+	c = DPLL(izjava3)
+	t21 = time.clock() - t2
+	print('Cas za resevanje Hadamardove matrika z DPLL: ', t21)
+	izjava4 = hadamard([[1,1,1,1],[-1,1,-1,1],[-1,-1,1,1],[1,-1,-1,-1]])
+	print('4. Hadamardova matrika velikosti 4x4: ')
+	t3 = time.clock()
+	c = DPLL(izjava4)
+	t31 = time.clock() - t3
+	print('Cas za resevanje Hadamardove matrika z DPLL: ', t31)
 	
 print('IZJAVE')
 primerIzjave()
