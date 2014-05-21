@@ -23,14 +23,14 @@ def potenca2(n):
 	tmp = 2
 	while tmp < n:
 		tmp = tmp * 2
-	return tmp == num
+	return tmp == n
 			
 # Funkcija sprejme seznam seznamov, ki predstavlja n x n matriko (podseznami predstavljajo vrstice v matriki)
 # in vrne izjavo, ki je resnicna, natanko tedaj, ko je matrika Hadamardova.
 def hadamard(n):
-	if (potenca2(n))
-		print('Podana velikost matrike mora biti potenca stevila 2!')
-		return n
+    if not potenca2(n):
+        print('Podana velikost matrike mora biti potenca stevila 2!')
+        return n
     spremen = []
     for i in range(n):
         spremen.append([])
@@ -92,7 +92,7 @@ def testS():
 # Preveri, ce je izjava resnicna natanko tedaj, ko je dana matrika h res hadamardova.
 def valuacija():
     #h = [[1,1],[1,-1]]
-	h = 2
+    h = 2
     had = hadamard(h)
     hadCNF = CNF(had)
     hadCNFp = hadCNF.poenostavi()
