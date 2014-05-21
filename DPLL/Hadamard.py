@@ -20,8 +20,7 @@ def stetje(m,sez):
 
 # Funkcija sprejme seznam seznamov, ki predstavlja n x n matriko (podseznami predstavljajo vrstice v matriki)
 # in vrne izjavo, ki je resnicna, natanko tedaj, ko je matrika Hadamardova.
-def hadamard(sez):
-    n = len(sez)
+def hadamard(n):
     spremen = []
     for i in range(n):
         spremen.append([])
