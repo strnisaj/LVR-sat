@@ -1,7 +1,5 @@
 #LVR-sat
 
-LVR-sat vsebuje tri module: CNF, DPLL in Prevajanje na SAT. Od teh je glaven DPLL, ki je predstavljen v nadaljevanju tega dokumenta. 
-
 ##DPLL
 
 Ta modul vsebuje ogrodje za delo z logičnimi izrazi (datoteka Izjave.py), primera prevedbe znanih problemov (Hadamardove matrike in sudoku) na SAT, SAT solverja (DPLL.py) ter primere uporabe (datoteka Primeri.py).
